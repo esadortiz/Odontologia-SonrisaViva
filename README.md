@@ -1,14 +1,14 @@
 # Sonrisa Viva Odontología
 
-Landing page profesional para clínica odontológica con chatbot de reservas impulsado por Gemini API y envío de confirmaciones por email con Resend.
+Landing page profesional para clínica odontológica con chatbot informativo impulsado por Gemini API y formulario de contacto con envío de emails por Resend.
 
 ## Tecnologías
 
 - **Next.js 16** (App Router)
 - **React 19** + **TypeScript**
 - **Tailwind CSS v4**
-- **Gemini API** — agente virtual conversacional para reservas
-- **Resend** — envío de emails de confirmación
+- **Gemini API** — asistente virtual informativo (horarios, servicios, ubicación, derivación a WhatsApp)
+- **Resend** — envío de emails desde el formulario de contacto
 
 ## Requisitos previos
 
@@ -31,9 +31,9 @@ RESEND_API_KEY=tu_clave_de_resend
 RESERVAS_EMAIL=correo@destino.com
 ```
 
-- `GEMINI_API_KEY` — Clave de la API de Google Gemini para el chatbot de reservas.
-- `RESEND_API_KEY` — Clave de la API de Resend para enviar emails de confirmación.
-- `RESERVAS_EMAIL` — Correo electrónico que recibirá las reservas.
+- `GEMINI_API_KEY` — Clave de la API de Google Gemini para el chatbot.
+- `RESEND_API_KEY` — Clave de la API de Resend para enviar emails del formulario de contacto.
+- `RESERVAS_EMAIL` — Correo electrónico que recibirá los mensajes del formulario de contacto.
 
 > Las variables reales deben configurarse en `.env.local` para desarrollo local y en **Vercel Environment Variables** para producción. Nunca subas claves reales al repositorio.
 
@@ -52,7 +52,7 @@ npm run lint   # Linting con ESLint
 src/
   app/
     api/chat/route.ts          # Endpoint de Gemini (chatbot)
-    api/reservas/route.ts      # Endpoint de Resend (email de reserva)
+    api/contacto/route.ts      # Endpoint de Resend (formulario de contacto)
     politica-de-privacidad/    # Página legal
     terminos-de-uso/           # Página legal
     layout.tsx                 # Layout raíz con SEO
@@ -96,7 +96,7 @@ public/
    - `RESEND_API_KEY`
    - `RESERVAS_EMAIL`
 4. Hacer deploy.
-5. Verificar que el chatbot y las reservas funcionen correctamente.
+5. Verificar que el chatbot y el formulario de contacto funcionen correctamente.
 
 ## Créditos
 

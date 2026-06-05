@@ -14,9 +14,10 @@ const sections = [
   },
   {
     title: "Uso del asistente virtual (chatbot)",
-    content: `Nuestro asistente virtual "Sonri" utiliza inteligencia artificial para orientar al usuario, responder consultas generales y gestionar solicitudes de reserva. Sin embargo:
+    content: `Nuestro asistente virtual "Sonri" utiliza inteligencia artificial para orientar al usuario, responder consultas generales sobre servicios, horarios y ubicación, y derivar al usuario a WhatsApp o al formulario de contacto para solicitar una cita. Sin embargo:
 
 • Las respuestas del chatbot son orientadoras y no constituyen un diagnóstico ni recomendación médica definitiva.
+• El chatbot NO confirma citas ni realiza reservas. Toda solicitud de cita debe realizarse por WhatsApp o mediante el formulario de contacto de la página.
 • La confirmación real de una cita depende de la verificación y aprobación por parte del personal de la clínica.
 • El chatbot puede no estar actualizado con cambios recientes en disponibilidad, horarios o servicios.`,
   },
@@ -26,7 +27,7 @@ const sections = [
   },
   {
     title: "Disponibilidad de citas",
-    content: `Las fechas y horarios mostrados como disponibles a través del chatbot o la página web son informativos y están sujetos a cambios. No se garantiza la disponibilidad definitiva de una cita hasta que sea confirmada directamente por el personal de la clínica Sonrisa Viva Odontología.`,
+    content: `Las fechas y horarios mostrados como informativos a través del chatbot o la página web son orientadores y están sujetos a cambios. No se garantiza la disponibilidad definitiva de una cita hasta que sea confirmada directamente por el personal de la clínica Sonrisa Viva Odontología.`,
   },
   {
     title: "Uso prohibido",

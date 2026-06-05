@@ -8,7 +8,6 @@ import {
   Send,
   Bot,
   User,
-  CheckCircle2,
   Trash2,
   CalendarDays,
   Clock,
@@ -23,20 +22,11 @@ interface Message {
   content: string;
 }
 
-interface ReservationData {
-  nombre: string;
-  telefono: string;
-  correo: string;
-  servicio: string;
-  dia: string;
-  hora: string;
-}
-
 const quickActions = [
   {
-    icon: CalendarDays,
-    label: "Reservar una cita",
-    message: "Quiero reservar una cita",
+    icon: MessageCircle,
+    label: "Solicitar cita por WhatsApp",
+    href: "https://wa.me/573106289086?text=Hola%2C%20quiero%20solicitar%20una%20cita%20odontol%C3%B3gica%20en%20Sonrisa%20Viva.%20Me%20gustar%C3%ADa%20conocer%20disponibilidad.",
   },
   {
     icon: Clock,
@@ -104,12 +94,36 @@ function TypingDots() {
   );
 }
 
+function renderMessageContent(content: string) {
+  const parts = content.split(/(\*\*[^*]+\*\*|\[([^\]]+)\]\([^)]+\))/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (linkMatch) {
+      const [, label, href] = linkMatch;
+      return (
+        <a
+          key={i}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary underline hover:no-underline font-medium"
+        >
+          {label}
+        </a>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 export default function ReservationAgent() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [reservationSent, setReservationSent] = useState(false);
   const [errorBanner, setErrorBanner] = useState<string | null>(null);
   const [showCapsule, setShowCapsule] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -155,45 +169,10 @@ export default function ReservationAgent() {
     setErrorBanner(null);
   }
 
-  async function sendReservation(data: ReservationData) {
-    setIsLoading(true);
-    setErrorBanner(null);
-    try {
-      const res = await fetch("/api/reservas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const result = await res.json();
-      if (res.ok && result.success) {
-        setReservationSent(true);
-        addMessage(
-          "assistant",
-          "✅ ¡Reserva enviada con éxito! La clínica recibió tu solicitud y se comunicará contigo si necesita confirmar algún detalle."
-        );
-      } else {
-        setErrorBanner(result.error || "Error al enviar la reserva");
-        addMessage(
-          "assistant",
-          `Hubo un problema al enviar la reserva: ${result.error || "Error desconocido"}. Puedes intentarlo de nuevo o contactar a la clínica.`
-        );
-      }
-    } catch {
-      setErrorBanner("Error de conexión al enviar la reserva");
-      addMessage(
-        "assistant",
-        "Error de conexión al enviar la reserva. Puedes intentarlo de nuevo o contactar a la clínica."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   async function sendMessage(text: string) {
     addMessage("user", text);
     setInput("");
     setIsLoading(true);
-    setReservationSent(false);
     setErrorBanner(null);
 
     try {
@@ -211,25 +190,21 @@ export default function ReservationAgent() {
 
       const data = await res.json();
 
-      if (res.ok && data.message) {
+      if (data.message) {
         addMessage("assistant", data.message);
-
-        if (data.reservation) {
-          await sendReservation(data.reservation);
-        }
       } else {
         setErrorBanner(data.error || "Error al procesar el mensaje");
         addMessage(
           "assistant",
           data.error ||
-            "Lo siento, no pude procesar tu mensaje. Intenta de nuevo."
+            "Ahora mismo el asistente inteligente está temporalmente ocupado, pero puedo ayudarte por WhatsApp al 310 628 9086 o desde el formulario de contacto."
         );
       }
     } catch {
       setErrorBanner("Error de conexión");
       addMessage(
         "assistant",
-        "Error de conexión. Por favor intenta de nuevo en unos momentos."
+        "Ahora mismo el asistente inteligente está temporalmente ocupado, pero puedo ayudarte por WhatsApp al 310 628 9086 o desde el formulario de contacto."
       );
     } finally {
       setIsLoading(false);
@@ -248,7 +223,6 @@ export default function ReservationAgent() {
 
   function handleClearHistory() {
     setMessages([]);
-    setReservationSent(false);
     setErrorBanner(null);
   }
 
@@ -323,13 +297,13 @@ export default function ReservationAgent() {
             </div>
           )}
 
-        <div
-          className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4"
-          aria-live="polite"
-          aria-label="Mensajes del chat"
-        >
-          {showWelcome ? (
-            <div className="flex flex-col items-center justify-center text-center min-h-full py-6 sm:py-8 px-2">
+          <div
+            className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4"
+            aria-live="polite"
+            aria-label="Mensajes del chat"
+          >
+            {showWelcome ? (
+              <div className="flex flex-col items-center justify-center text-center min-h-full py-6 sm:py-8 px-2">
                 <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-primary/10 text-primary mb-4 overflow-hidden">
                   <Image
                     src="/images/sonri-bot.png"
@@ -353,8 +327,7 @@ export default function ReservationAgent() {
                   Tu asistente virtual de Sonrisa Viva Odontología
                 </p>
                 <p className="text-xs text-muted-foreground/80 max-w-[220px] sm:max-w-xs mb-5 sm:mb-6 leading-relaxed">
-                  Puedo ayudarte a consultar servicios, horarios, ubicación o
-                  reservar una cita.
+                  Puedo orientarte sobre servicios, horarios, ubicación y derivarte para solicitar tu cita.
                 </p>
 
                 <div className="grid grid-cols-2 gap-2 sm:gap-2.5 w-full max-w-[280px] sm:max-w-xs">
@@ -409,14 +382,7 @@ export default function ReservationAgent() {
                       }`}
                       style={{ overflowWrap: "anywhere" }}
                     >
-                      {msg.content.split(/(\*\*[^*]+\*\*)/).map((part, i) => {
-                        if (part.startsWith("**") && part.endsWith("**")) {
-                          return (
-                            <strong key={i}>{part.slice(2, -2)}</strong>
-                          );
-                        }
-                        return <span key={i}>{part}</span>;
-                      })}
+                      {renderMessageContent(msg.content)}
                     </div>
                   </div>
                 ))}
@@ -427,21 +393,6 @@ export default function ReservationAgent() {
                     <div className="rounded-2xl rounded-tl-md bg-muted px-3 sm:px-4 py-2.5 sm:py-3">
                       <TypingDots />
                     </div>
-                  </div>
-                )}
-
-                {reservationSent && !isLoading && (
-                  <div className="pl-8 sm:pl-10">
-                    <button
-                      onClick={() => {
-                        setReservationSent(false);
-                        sendMessage("Quiero reservar otra cita");
-                      }}
-                      className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-xs font-medium text-secondary hover:bg-secondary hover:text-white transition-colors"
-                    >
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      Reservar otra cita
-                    </button>
                   </div>
                 )}
               </div>
@@ -485,12 +436,12 @@ export default function ReservationAgent() {
           <button
             onClick={handleOpen}
             className="animate-capsule-in flex items-center gap-1.5 sm:gap-2 rounded-full bg-foreground/90 hover:bg-foreground shadow-lg px-3 sm:px-4 py-2 sm:py-2.5 text-white text-xs sm:text-sm font-medium whitespace-nowrap transition-colors group"
-            aria-label="Reserva aquí - Abrir asistente"
+            aria-label="Consulta aquí - Abrir asistente"
           >
             <span className="hidden sm:inline animate-capsule-pulse">
-              Reserva aquí
+              Consulta aquí
             </span>
-            <span className="sm:hidden animate-capsule-pulse">Reserva</span>
+            <span className="sm:hidden animate-capsule-pulse">Consulta</span>
             <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
           </button>
         )}

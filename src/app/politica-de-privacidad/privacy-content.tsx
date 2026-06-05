@@ -10,23 +10,22 @@ const sections = [
   },
   {
     title: "Datos que se recopilan",
-    content: `A través del asistente virtual y los formularios de la página, podemos recopilar los siguientes datos personales:
+    content: `A través del formulario de contacto de la página, podemos recopilar los siguientes datos personales:
 
 • Nombre completo
 • Número de teléfono
 • Correo electrónico
-• Servicio odontológico solicitado
-• Día y hora preferidos para la cita
+• Servicio odontológico de interés
+• Mensaje o consulta
 
-Estos datos se proporcionan de forma voluntaria por el usuario al interactuar con el chatbot o solicitar una reserva.`,
+Estos datos se proporcionan de forma voluntaria por el usuario al enviar un mensaje desde el formulario de contacto.`,
   },
   {
     title: "Finalidad del tratamiento",
     content: `Los datos personales que recopilamos se utilizan exclusivamente para:
 
-• Gestionar solicitudes de reserva de citas odontológicas
-• Contactar al usuario para confirmar, modificar o cancelar citas
-• Responder consultas sobre servicios, horarios y disponibilidad
+• Gestionar mensajes y solicitudes de contacto recibidos desde el formulario de la página
+• Contactar al usuario para responder consultas sobre servicios, horarios y disponibilidad
 • Prestar información relevante sobre los servicios odontológicos de la clínica
 
 No utilizamos los datos para fines distintos a los aquí descritos.`,
@@ -35,9 +34,9 @@ No utilizamos los datos para fines distintos a los aquí descritos.`,
     title: "Uso de tecnologías de terceros",
     content: `Para prestar nuestros servicios, utilizamos las siguientes tecnologías de terceros:
 
-• **Gemini (Google AI):** Nuestro asistente virtual "Sonri" utiliza la inteligencia artificial de Gemini para procesar las consultas del usuario, interpretar solicitudes de reserva y generar respuestas orientadoras. Las conversaciones se envían a los servidores de Google para su procesamiento, sujetos a la política de privacidad de Google.
+• **Gemini (Google AI):** Nuestro asistente virtual "Sonri" utiliza la inteligencia artificial de Gemini para responder preguntas abiertas del usuario. Las conversaciones se envían a los servidores de Google para su procesamiento, sujetos a la política de privacidad de Google. El chatbot NO recopila ni envía datos de reservas.
 
-• **Resend:** Las solicitudes de reserva confirmadas se envían por correo electrónico al encargado de la clínica mediante el servicio Resend. Los datos de la reserva (nombre, teléfono, correo, servicio, día y hora) se incluyen en dicho correo para que la clínica pueda gestionar la cita.`,
+• **Resend:** Los mensajes enviados desde el formulario de contacto se envían por correo electrónico a la clínica mediante el servicio Resend. Los datos del formulario (nombre, teléfono, correo, servicio de interés y mensaje) se incluyen en dicho correo para que la clínica pueda gestionar la solicitud.`,
   },
   {
     title: "No venta de datos personales",
