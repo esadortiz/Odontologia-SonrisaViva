@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sonrisa Viva Odontología
 
-## Getting Started
+Landing page profesional para clínica odontológica con chatbot de reservas impulsado por Gemini API y envío de confirmaciones por email con Resend.
 
-First, run the development server:
+## Tecnologías
+
+- **Next.js 16** (App Router)
+- **React 19** + **TypeScript**
+- **Tailwind CSS v4**
+- **Gemini API** — agente virtual conversacional para reservas
+- **Resend** — envío de emails de confirmación
+
+## Requisitos previos
+
+- Node.js 18+
+- npm
+
+## Instalación
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+GEMINI_API_KEY=tu_clave_de_gemini
+RESEND_API_KEY=tu_clave_de_resend
+RESERVAS_EMAIL=correo@destino.com
+```
 
-## Learn More
+- `GEMINI_API_KEY` — Clave de la API de Google Gemini para el chatbot de reservas.
+- `RESEND_API_KEY` — Clave de la API de Resend para enviar emails de confirmación.
+- `RESERVAS_EMAIL` — Correo electrónico que recibirá las reservas.
 
-To learn more about Next.js, take a look at the following resources:
+> Las variables reales deben configurarse en `.env.local` para desarrollo local y en **Vercel Environment Variables** para producción. Nunca subas claves reales al repositorio.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Comandos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev    # Servidor de desarrollo
+npm run build  # Build de producción
+npm start      # Servidor de producción
+npm run lint   # Linting con ESLint
+```
 
-## Deploy on Vercel
+## Estructura del proyecto
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+  app/
+    api/chat/route.ts          # Endpoint de Gemini (chatbot)
+    api/reservas/route.ts      # Endpoint de Resend (email de reserva)
+    politica-de-privacidad/    # Página legal
+    terminos-de-uso/           # Página legal
+    layout.tsx                 # Layout raíz con SEO
+    page.tsx                   # Página principal
+    globals.css                # Estilos y paleta de colores
+    robots.ts                  # Robots.txt
+    sitemap.ts                 # Sitemap
+    icon.png                   # Favicon
+  components/
+    Navbar.tsx
+    Hero.tsx
+    Servicios.tsx
+    Beneficios.tsx
+    Sobre.tsx
+    Testimonios.tsx
+    Contacto.tsx
+    Footer.tsx
+    Preloader.tsx
+    ReservationAgent.tsx       # Chatbot Sonri
+  lib/
+    data.ts                    # Datos compartidos (servicios, contacto)
+    agent-context.ts           # Prompt del agente, horarios, slots
+  hooks/
+    useAnimations.ts           # Hooks de scroll reveal y count up
+public/
+  images/
+    sonrisa-viva-logo.png      # Logo principal
+    sonrisa-viva-logo-2.png    # Logo para favicon
+    sonri-bot.png              # Avatar del chatbot
+    clinica-odontologica.jpg   # Imagen sección Sobre
+    sonrisa-odontologia.jpg    # Imagen sección Hero
+    servicios/                 # Imágenes de las 6 cards de servicios
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Despliegue en Vercel
+
+1. Subir el proyecto a GitHub.
+2. Importar el repositorio en [vercel.com](https://vercel.com).
+3. Agregar las variables de entorno en **Settings → Environment Variables**:
+   - `GEMINI_API_KEY`
+   - `RESEND_API_KEY`
+   - `RESERVAS_EMAIL`
+4. Hacer deploy.
+5. Verificar que el chatbot y las reservas funcionen correctamente.
+
+## Créditos
+
+Desarrollado por [david-ortiz.dev](https://www.david-ortiz.dev)
