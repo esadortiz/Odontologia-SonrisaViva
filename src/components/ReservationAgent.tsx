@@ -95,14 +95,17 @@ function TypingDots() {
 }
 
 function renderMessageContent(content: string) {
-  const parts = content.split(/(\*\*[^*]+\*\*|\[([^\]]+)\]\([^)]+\))/g);
+  const safeContent = typeof content === "string" ? content : "";
+  const parts = safeContent.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
   return parts.map((part, i) => {
+    if (typeof part !== "string" || part === "") return null;
     if (part.startsWith("**") && part.endsWith("**")) {
       return <strong key={i}>{part.slice(2, -2)}</strong>;
     }
     const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
     if (linkMatch) {
-      const [, label, href] = linkMatch;
+      const label = typeof linkMatch[1] === "string" ? linkMatch[1] : "";
+      const href = typeof linkMatch[2] === "string" ? linkMatch[2] : "#";
       return (
         <a
           key={i}
@@ -190,7 +193,7 @@ export default function ReservationAgent() {
 
       const data = await res.json();
 
-      if (data.message) {
+      if (data.message && typeof data.message === "string") {
         addMessage("assistant", data.message);
       } else {
         setErrorBanner(data.error || "Error al procesar el mensaje");
@@ -382,7 +385,7 @@ export default function ReservationAgent() {
                       }`}
                       style={{ overflowWrap: "anywhere" }}
                     >
-                      {renderMessageContent(msg.content)}
+                      {renderMessageContent(typeof msg.content === "string" ? msg.content : "No pude procesar esa opción. Intenta nuevamente o escríbenos por WhatsApp al 310 628 9086.")}
                     </div>
                   </div>
                 ))}
